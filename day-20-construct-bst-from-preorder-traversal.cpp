@@ -23,16 +23,18 @@ struct TreeNode
 class Solution
 {
 private:
-    TreeNode *constructTree(vector<int> &rt, int pos, int min, int max)
+    int pos;
+    TreeNode *constructTree(vector<int> &rt, int min, int max)
     {
         if (pos >= rt.size())
             return NULL;
         TreeNode *root = NULL;
         if (rt[pos] > min && rt[pos] < max)
         {
-            root = new TreeNode(rt[pos]);
-            root->left = constructTree(rt, pos + 1, min, rt[pos]);
-            root->right = constructTree(rt, pos + 1, rt[pos], max);
+            int key = rt[pos++];
+            root = new TreeNode(key);
+            root->left = constructTree(rt, min, key);
+            root->right = constructTree(rt, key, max);
         }
         return root;
     }
@@ -40,7 +42,8 @@ private:
 public:
     TreeNode *bstFromPreorder(vector<int> &preorder)
     {
-        return constructTree(preorder, 0, INT_MIN, INT_MAX);
+        pos = 0;
+        return constructTree(preorder, INT_MIN, INT_MAX);
     }
 };
 
